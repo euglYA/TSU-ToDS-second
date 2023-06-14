@@ -2,44 +2,6 @@
 #define CPP_H
 #include "af_units.h"
 
-class MethodUnitCPP : public MethodUnit {
-public:
-    enum Modifier {
-        STATIC              = 1,
-        CONST               = 1 << 1,
-        VIRTUAL             = 1 << 2
-    };
-
-    MethodUnitCPP(const std::string& name, const std::string& returnType, Flags flags) :
-        MethodUnit(name, returnType, flags) { }
-
-    std::string compile(unsigned int level = 0) const override {
-        std::string result = generateShift(level);
-
-        if (getFlags() & STATIC)
-            result += "static ";
-        else if (getFlags() & VIRTUAL)
-            result += "virtual ";
-
-        result += getReturnType() + " ";
-        result += getName() + "()";
-
-        if (getFlags() & CONST)
-            result += " const";
-
-        result += " {\n";
-
-        for (const auto& b : getBody()) {
-            result += b->compile(level + 1);
-        }
-
-        result += generateShift(level) + "}\n";
-        return result;
-    }
-};
-
-
-
 class ClassUnitCPP : public ClassUnit {
 public:
 
@@ -48,7 +10,7 @@ public:
 
     std::string compile(unsigned int level = 0) const override {
         std::string result = generateShift(level) + "class " + getName() + " {\n";
-        std::vector<std::string> ModifiersCPP = {"public", "protected", "private"};
+
         for (size_t i = 0; i < ACCESS_MODIFIERS.size(); ++i) {
             if (getFields(i).empty())
                 continue;
@@ -61,6 +23,37 @@ public:
         }
 
         result += generateShift(level) + "};\n";
+        return result;
+    }
+};
+
+class MethodUnitCPP : public MethodUnit {
+public:
+    MethodUnitCPP(const std::string& name, const std::string& returnType, Flags flags) :
+        MethodUnit(name, returnType, flags) { }
+
+    std::string compile(unsigned int level = 0) const override {
+        std::string result = generateShift(level);
+        Flags flags = getFlags();
+
+        if (flags & STATIC)
+            result += "static ";
+        else if (flags & VIRTUAL)
+            result += "virtual ";
+
+        result += getReturnType() + " ";
+        result += getName() + "()";
+
+        if (flags & CONST)
+            result += " const";
+
+        result += " {\n";
+
+        for (const auto& b : getBody()) {
+            result += b->compile(level + 1);
+        }
+
+        result += generateShift(level) + "}\n";
         return result;
     }
 };

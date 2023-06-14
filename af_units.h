@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+
+
 class Unit {
 public:
     using Flags = unsigned int;
@@ -135,8 +137,6 @@ public:
         throw std::runtime_error("Not supported");
     }
 
-
-
 protected:
     using Fields = std::vector<std::shared_ptr<Unit>>;
 
@@ -155,8 +155,6 @@ private:
     std::string m_name;
     std::vector<Fields> m_fields;
 };
-
-const std::vector<std::string> ClassUnit::ACCESS_MODIFIERS = {"public", "protected", "private", "internal", "protected internal", "private protected"};
 
 class PrintOperatorUnit : public Unit {
 public:

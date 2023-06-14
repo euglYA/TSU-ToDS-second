@@ -1,7 +1,7 @@
 
 #include <QCoreApplication>
 
-#include "Factories.h""
+#include "Factories.h"
 
 std::string generateProgram(const std::shared_ptr<CodeFactory> &factory) {
     std::unique_ptr<ClassUnit> myClass = factory->createClassUnit("MyClass");
@@ -24,6 +24,6 @@ std::string generateProgram(const std::shared_ptr<CodeFactory> &factory) {
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    std::cout << "C++: \n\n" << generateProgram(std::make_shared<CodeFactoryCPP>()) << std::endl;
+    std::cout << "C++: \n\n" << generateProgram(std::make_shared<CodeFactoryC_SHARP>()) << std::endl;
   return a.exec();
 }
