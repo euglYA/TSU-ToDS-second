@@ -6,13 +6,6 @@
 #include <memory>
 #include <vector>
 
-
-class AbstractFactory {
-
-};
-
-
-
 class Unit {
 public:
     using Flags = unsigned int;
@@ -25,7 +18,9 @@ public:
 
     virtual std::string compile(unsigned int level = 0) const = 0;
 
-    virtual Flags getFlags() const = 0;
+    virtual Flags getFlags() const {
+        return Flags();
+    }
 
 protected:
     virtual std::string generateShift(unsigned int level) const {
@@ -113,16 +108,25 @@ public:
         int accessModifier = PRIVATE;
         Flags flags = unit->getFlags();
 
-        if (flags & MethodUnit::PUBLIC)
+        switch (flags) {
+        case MethodUnit::PUBLIC:
             accessModifier = PUBLIC;
-        else if (flags & MethodUnit::PROTECTED)
+            break;
+        case MethodUnit::PROTECTED:
             accessModifier = PROTECTED;
-        else if (flags & MethodUnit::INTERNAL)
+            break;
+        case MethodUnit::INTERNAL:
             accessModifier = INTERNAL;
-        else if (flags & MethodUnit::PROTECTED_INTERNAL)
+            break;
+        case MethodUnit::PROTECTED_INTERNAL:
             accessModifier = PROTECTED_INTERNAL;
-        else if (flags & MethodUnit::PRIVATE_PROTECTED)
+            break;
+        case MethodUnit::PRIVATE_PROTECTED:
             accessModifier = PRIVATE_PROTECTED;
+            break;
+        default:
+            break;
+        }
 
         m_fields[accessModifier].push_back(unit);
     }
@@ -131,14 +135,24 @@ public:
         throw std::runtime_error("Not supported");
     }
 
+
+
 protected:
+    using Fields = std::vector<std::shared_ptr<Unit>>;
+
     std::string getName() const {
         return m_name;
     }
 
+
+    const Fields& getFields(unsigned int accessGroup) const {
+        if (ACCESS_MODIFIERS.size() <= accessGroup)
+            throw std::out_of_range("Invalid access group");
+        return m_fields[accessGroup];
+    }
+
 private:
     std::string m_name;
-    using Fields = std::vector<std::shared_ptr<Unit>>;
     std::vector<Fields> m_fields;
 };
 
@@ -153,9 +167,16 @@ public:
         throw std::runtime_error("Not supported");
     }
 
+protected:
+    std::string getText() const {
+        return m_text;
+    }
+
 private:
     std::string m_text;
 };
+
+
 
 
 #endif // AF_UNITS_H

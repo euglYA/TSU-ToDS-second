@@ -9,7 +9,6 @@ CONFIG += c++17 cmdline
 SOURCES += \
         c_sharp.cpp \
         cpp.cpp \
-        java.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -18,7 +17,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Factories.h \
     af_units.h \
     c_sharp.h \
-    cpp.h \
-    java.h
+    cpp.h
