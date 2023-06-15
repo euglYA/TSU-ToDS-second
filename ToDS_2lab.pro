@@ -8,8 +8,6 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         af_units.cpp \
-        c_sharp.cpp \
-        cpp.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -21,4 +19,5 @@ HEADERS += \
     Factories.h \
     af_units.h \
     c_sharp.h \
-    cpp.h
+    cpp.h \
+    java.h
