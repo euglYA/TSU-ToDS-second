@@ -44,11 +44,11 @@ public:
             result += "private ";
 
         if (flags & STATIC)
-            result += " static ";
+            result += "static ";
         else if (flags & FINAL)
-            result += " final ";
+            result += "final ";
         else if (flags & ABSTRACT)
-            result += " abstract ";
+            result += "abstract ";
 
         result += getReturnType() + " ";
         result += getName() + "()";
