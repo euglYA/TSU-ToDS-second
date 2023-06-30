@@ -13,28 +13,18 @@ public:
         std::string result = generateShift(level);
         Flags flags = getFlags();
 
-        switch(flags) {
-        case PUBLIC:
-            result += "public ";
-            break;
-        case PROTECTED:
-            result += "protected ";
-            break;
-        case PRIVATE:
+        if (flags & PUBLIC)
+            result += "static ";
+        else if (flags & PROTECTED)
+            result += "final ";
+        else if (flags & PRIVATE)
+            result += "abstract ";
+        else if (flags & PRIVATE_PROTECTED)
+            result += "final ";
+        else if (flags & INTERNAL)
+            result += "abstract ";
+        else
             result += "private ";
-            break;
-        case PRIVATE_PROTECTED:
-            result += "private protected ";
-            break;
-        case INTERNAL:
-            result += "internal ";
-            break;
-        case PROTECTED_INTERNAL:
-            result += "protected internal ";
-            break;
-        default:
-            break;
-        }
 
         if (flags & STATIC)
             result += "static ";
